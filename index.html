@@ -1,0 +1,327 @@
+<html ng-app>
+    <head>
+        <title>angularjs-share</title>
+        <meta http-equiv="X-UA-Compatible" content="chrome=1" charset="utf-8">
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="css/share.css">
+        <script src="libs/jquery-1.11.0.js"></script>
+        <script src="libs/TweenMax.min.js"></script>
+        <script src="libs/fingertip.js"></script>
+        <script type="text/javascript" src="http://g.tbcdn.cn/franky/static/angularjs/1.3.3/angular.js?v=1.3.3"></script>
+    </head>
+    <body>
+        <section class="slides">
+            <article class="first current" slide-num="0">
+                <div style="margin-top:150px;">
+                    <h1 class="txt-center">Angularjs</h1>
+                    <h2 class="txt-center">文档及demo代码：git@gitlab.alibaba-inc.com:bashao.lwq/angularjs-share.git</h2>
+                    <h3 class="txt-center">by 巴韶 &lt;vincent.liwq@gmail.com&gt;</h3>
+                </div>
+            </article>
+            <article class="next" slide-num="1" >
+                <div class="article-container">
+                    <h1 class="txt-center">what is angularjs</h1>
+                    <div class="title-1">一个框架 or 一种思维方式</div>
+                </div>
+            </article>
+            <article class="far-next" slide-num="2">
+                <div class="article-container">
+                    <h1 class="txt-center">why angularjs</h1>
+                    <div class="block-center" style="margin-top:12%;">
+                        <h2 class="build-fade">双向的数据绑定</h2>
+                        <h2 class="build-fade">HTML模板</h2>
+                        <h2 class="build-fade">MVC</h2>
+                        <h2 class="build-fade">依赖注入（Dependency Injection，即DI）</h2>
+                        <h2 class="build-fade">Directives（指令）</h2>
+                    </div>
+                </div>
+            </article>
+            <article slide-num="3">
+                <div class="article-container">
+                    <h1 class="txt-center">angularjs 初始化</h1>
+                    <h3>看下一个初始化的例子</h3>
+                    <div>
+                        <form role="form">
+                          <div class="form-group">
+                            <label for="">Name:</label>
+                            <input type="text" ng-model="yourName" class="form-control" id="" placeholder="Enter Your Name">
+                          </div>
+                        </form>
+                        <hr>
+                        <h1>Hello {{yourName}}!</h1>
+                    </div>
+                </div>
+            </article>
+            <article slide-num="4">
+                <div class="article-container">
+                    <h1 class="txt-center">看下代码</h1>
+                    <pre>
+<!doctype html>
+&lt;html ng-app>
+  &lt;head>
+    &lt;script type="text/javascript" src="http://g.tbcdn.cn/franky/static/angularjs/1.3.3/angular.js?v=1.3.3">&lt;/script>
+  &lt;/head>
+  &lt;body>
+    &lt;div>
+      &lt;label>Name:&lt;/label>
+      &lt;input type="text" ng-model="yourName" placeholder="Enter a name here">
+      &lt;hr>
+      &lt;h1>Hello {{yourName}}!&lt;/h1>
+    &lt;/div>
+  &lt;/body>
+&lt;/html>
+                    </pre>
+                </div>
+            </article>
+            <article slide-num="5">
+                <div class="article-container">
+                    <h1 class="txt-center">另外一种初始化</h1>
+                    <pre>
+var test = angular.module('myTestCase', []);
+test.controller('TodoController', ['$scope', function($scope) {
+    $scope.myName = 'bashao';
+}]);
+angular.bootstrap(document, [test.name]);
+                    </pre>
+                </div>
+            </article>
+            <article slide-num="6">
+                <div class="article-container">
+                    <h1 class="txt-center">Angular 模板</h1>
+                    <h3>原生html模板，为了能够使用自定义标签，集成了html标签属性。</h3>
+                    <pre>
+var template = '&lt;div>&lt;/div>';
+$compile(template)(scope, function(){});
+                    </pre>
+                </div>
+            </article>
+            <article slide-num="7">
+                <div class="article-container">
+                    <h1 class="txt-center">Angularjs MVC</h1>
+                    <h3>angularjs的mvc需要额外加载一个router模块，主要是用来控制路由的。具体的可以参考一个例子。</h3>
+                    <h3><a href="http://g.alicdn.com/franky/apis/marquee/index.html" target="_blank">Demo</a></h3>
+                </div>
+            </article>
+            <article slide-num="8">
+                <div class="article-container">
+                    <h1 class="txt-center">Angular DI and Directive</h1>
+                    <h3>angular的依赖注入是和directive的实现紧密相关的。我们来看一个具体的directive写法。</h3>
+                    <pre>
+angular.module('test', []).directive('panel', ['$injector', function($injector) {
+    return {
+        controller : function(){}
+    }
+}]).directive('panel', ['$injector', function($injector) {
+    return {
+        require: '^parent',
+        restrict: 'AEC',
+        transclude: true,
+        scope: { title: '@' },
+        link: function(scope, element, attrs, parentCtrl) {
+            tabsCtrl.addPane(scope);
+        },
+        template: '&lt;div class="tab-pane" ng-class="{active: selected}" ng-transclude>&lt;/div>',
+        replace: true
+    };
+}]);
+                    </pre>
+                </div>
+            </article>
+            <article slide-num="9">
+                <div class="article-container">
+                    <h1 class="txt-center">Angularjs provider</h1>
+                    <h3>Angularjs提供了一些便捷方法用来在各个directive之间共享。比如 provider，factory，service。</h3>
+                    <pre>
+angular.module('test', []).provider('$test', function() {
+    this.$get = function(){
+        return {
+            test : function(){}
+        }
+    }
+    this.$get = ['$http', function('$http'){
+        return {
+            test : function(){}
+        }
+    }]
+    //以上等价
+    this.$get.$inject = ['$http'];
+    this.$get = function($http){
+        return {
+            test : function(){}
+        }
+    }
+});
+                    </pre>
+                </div>
+            </article>
+            <article slide-num="10">
+                <div class="article-container">
+                    <h1 class="txt-center">Angular Service</h1>
+                    <h3>service允许我们获取到注入参数的实例。这个文字上不太好懂，可以理解为，返回一个函数实例，比如 new helloWorldFromService();</h3>
+                    <pre>
+var myApp = angular.module('myApp', []);
+
+//Service style, probably the simplest one
+myApp.service('helloWorldFromService', function() {
+    this.sayHello = function() {
+        return "Hello, World!"
+    };
+});
+                    </pre>
+                </div>
+            </article>
+            <article slide-num="11">
+                <div class="article-container">
+                    <h1 class="txt-center">Angular Factory</h1>
+                    <h3>factory可以理解返回注入参数的值。看demo很好懂。</h3>
+                    <pre>
+/Factory style, more involved but more sophisticated
+myApp.factory('helloWorldFromFactory', function() {
+    return {
+        sayHello: function() {
+            return "Hello, World!"
+        }
+    };
+}); </pre>
+                </div>
+            </article>
+            <article slide-num="12">
+                <div class="article-container">
+                    <h1 class="txt-center">Angular Provider</h1>
+                    <h3>provider使用$get属性获取注入关系。而且我们可以在module声明以后，利用config方法初始化provider。</h3>
+                    <pre>
+//Provider style, full blown, configurable version
+myApp.provider('helloWorld', function() {
+    // In the provider function, you cannot inject any
+    // service or factory. This can only be done at the
+    // "$get" method.
+    this.name = 'Default';
+    this.$get = function() {
+        var name = this.name;
+        return {
+            sayHello: function() {
+                return "Hello, " + name + "!"
+            }
+        }
+    };
+    this.setName = function(name) {
+        this.name = name;
+    };
+});
+//Hey, we can configure a provider!
+myApp.config(function(helloWorldProvider){
+    helloWorldProvider.setName('World');
+});</pre>
+                </div>
+            </article>
+            <article slide-num="13">
+                <div class="article-container">
+                    <h1 class="txt-center">Angular Promises</h1>
+                    <h4>promises协议在Angular中怎么使用和实现。</h4>
+                    <pre>
+function getPromise1(){
+    return $http.get(url, {cache: $templateCache});
+}
+function getPromise2(){
+    var deffered  = $q.defer();
+    require.async(url, function(response) {
+        deffered.resolve(/*params*/);
+    });
+    return deffered.promise;
+}
+$q.when(getPromise1()).then(function(){
+    console.log('do something');
+});
+$q.all([getPromise1(),getPromise2()]).then(function(){
+    console.log('do something');
+});
+
+                    </pre>
+                </div>
+            </article>
+            <article slide-num="14">
+                <div class="article-container">
+                    <h1 class="txt-center">Angular Promises</h1>
+                    <pre>
+function asyncGreet(name) {
+  var deferred = $q.defer();
+
+  setTimeout(function() {
+    deferred.notify('About to greet ' + name + '.');
+
+    if (okToGreet(name)) {
+      deferred.resolve('Hello, ' + name + '!');
+    } else {
+      deferred.reject('Greeting ' + name + ' is not allowed.');
+    }
+  }, 1000);
+
+  return deferred.promise;
+}
+
+var promise = asyncGreet('Robin Hood');
+promise.then(function(greeting) {
+  alert('Success: ' + greeting);
+}, function(reason) {
+  alert('Failed: ' + reason);
+}, function(update) {
+  alert('Got notification: ' + update);
+});
+                    </pre>
+                </div>
+            </article>
+            <article slide-num="15">
+                <div class="article-container">
+                    <h1 class="txt-center">Angular $apply $digest</h1>
+                    <h4>angular允许外部数据加入到整个Angular的监听链条。使用方法就是$apply。$apply会强行执行当前scope的$digest方法，触发watch。</h4>
+                    <pre>
+var scope = ...;
+scope.name = 'misko';
+scope.counter = 0;
+
+expect(scope.counter).toEqual(0);
+scope.$watch('name', function(newValue, oldValue) {
+  scope.counter = scope.counter + 1;
+});
+expect(scope.counter).toEqual(0);
+
+scope.$digest();
+expect(scope.counter).toEqual(1);
+
+scope.$digest();
+expect(scope.counter).toEqual(1);
+
+scope.name = 'adam';
+scope.$digest();
+expect(scope.counter).toEqual(2);
+                    </pre>
+                </div>
+            </article>
+            <article slide-num="16">
+                <div class="article-container">
+                    <h1 class="txt-center">Angular $emit $broadcast</h1>
+                    <h4>scope之间的通信协议，通过$emit和$broadcast方法完成。</h4>
+                    <pre>
+scope.$on('test1', function(){
+    
+});
+
+//下面这句可以这么写，但是没有啥意义，基本上还是要到父scope的方法中调用
+scope.$parent.$broadcast('test1', params);
+
+//下面这句是YY的，没有这么写的，实际是要到子scope的方法里面调用
+scope.$children.$emit('test1', params);
+                    </pre>
+                </div>
+            </article>
+            <article slide-num="17">
+                <div class="article-container">
+                    <h1>The End</h1>
+                    <div style="font-size:100px;text-align:center;margin-top:100px;color:#0075BA">THANKS</div>
+                </div>
+            </article>
+        </section>
+    </body>
+    
+</html>
+
